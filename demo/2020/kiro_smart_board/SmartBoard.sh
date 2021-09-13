@@ -1,0 +1,1 @@
+python3 /home/user/release/SmartBoard/main.py

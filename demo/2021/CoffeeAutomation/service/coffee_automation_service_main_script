@@ -1,0 +1,20 @@
+#!/bin/bash
+while :
+do
+   echo "Waiting for Task Manager..."
+   found=$(pgrep TaskMan)
+   
+   if [ ${found} ] ;
+   then
+      break
+   fi
+   sleep 5
+done
+echo "Found Task Manager."
+sleep 40
+echo "Start kma_coffee Dash Application."
+while :
+do
+   sudo /home/user/release/TasksDeployment/PythonScript/start.sh
+   sleep 10
+done
