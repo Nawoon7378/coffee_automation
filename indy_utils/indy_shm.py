@@ -360,23 +360,6 @@ class IndyShmCommand:
                    'data': vel}
         return self.command_set_logic(INDY_SHM_CLIENT_ADDR8_CMD_SET_TMOVE_VEL_LEVEL, add_arg)
 
-# acc
-    def set_joint_acc_level(self, vel):
-        add_arg = {'cmd_name': INDY_SHM_CLIENT_ADDR32_VAL_JMOVE_ACC_LEVEL,
-                   'cmd_size': 4,
-                   'data_type': 'I',
-                   'data': vel}
-        return self.command_set_logic(INDY_SHM_CLIENT_ADDR8_CMD_SET_JMOVE_ACC_LEVEL, add_arg)
-
-        
-    def set_task_acc_level(self, vel):
-        add_arg = {'cmd_name': INDY_SHM_CLIENT_ADDR32_VAL_TMOVE_ACC_LEVEL,
-                   'cmd_size': 4,
-                   'data_type': 'I',
-                   'data': vel}
-        return self.command_set_logic(INDY_SHM_CLIENT_ADDR8_CMD_SET_TMOVE_ACC_LEVEL, add_arg)
-# acc
-
     def set_joint_waypoint_time(self, wp_time):
         if wp_time < 0.5:
             return False
@@ -754,19 +737,6 @@ class IndyShmCommand:
             print("out of range :", res_data)
             return None
 
-    def get_el1008_di_2(self):
-        res_data = self.shm_access(INDY_SHM_EL1008_DI_2, 1, 'B')
-
-        result = [0, 0, 0, 0, 0, 0, 0, 0]
-        if res_data < 256:
-            b = list("{0:b}".format(res_data))
-            for i in range(len(b)):
-                result[i] = int(b[len(b)-i-1])
-            return result
-        else:
-            print("out of range :", res_data)
-            return None            
-
     def set_el2008_do(self, arr):
         if len(arr) != 8:
             print('Input should be 8 bits array')
@@ -783,19 +753,11 @@ class IndyShmCommand:
         self.shm_command(INDY_SHM_EL2008_DO, 1, 'B', s)
         return None
 
+    def set_el2008_do_val(self, addr, val):
+        current = self.get_el1008_di()
+        current[addr] = val
+        return self.set_el2008_do(current)
 
-    def get_el2008_do(self):
-        res_data = self.shm_access(INDY_SHM_EL2008_DO, 1, 'B')
-
-        result = [0, 0, 0, 0, 0, 0, 0, 0]
-        if res_data < 256:
-            b = list("{0:b}".format(res_data))
-            for i in range(len(b)):
-                result[i] = int(b[len(b)-i-1])
-            return result
-        else:
-            print("out of range :", res_data)
-            return None
 
     def get_di(self):
         return self.shm_access(INDY_SHM_SERVER_ADDRCUST_SMART_DI, 1 * 32, '32B')

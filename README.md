@@ -1,1 +1,2 @@
-# coffee_automation
+# Coffee Automation system
+
